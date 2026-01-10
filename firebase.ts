@@ -1,5 +1,4 @@
-// @ts-ignore
-import { initializeApp } from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
@@ -15,8 +14,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+const app = firebase.initializeApp(firebaseConfig);
+export const auth = getAuth(app as any);
+export const db = getFirestore(app as any);
 export const googleProvider = new GoogleAuthProvider();
-export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+export const analytics = typeof window !== 'undefined' ? getAnalytics(app as any) : null;
