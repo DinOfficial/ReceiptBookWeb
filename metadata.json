@@ -1,0 +1,7 @@
+{
+  "name": "Receipt Book",
+  "description": "A production-grade invoice management system compatible with existing Flutter backends, featuring real-time financial calculations and PDF generation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
