@@ -12,6 +12,7 @@ import {
   PlusCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from '../components/Loader';
 
 const Dashboard: React.FC = () => {
   const { user } = useUser();
@@ -38,22 +39,15 @@ const Dashboard: React.FC = () => {
   const totalSales = invoices.reduce((sum, inv) => sum + inv.total, 0);
   const pendingInvoices = invoices.filter(i => i.status !== 'Paid').length;
 
-  if (loading) return <div className="animate-pulse space-y-8">
-    <div className="h-32 bg-slate-200 rounded-2xl w-full"></div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="h-40 bg-slate-200 rounded-2xl"></div>
-      <div className="h-40 bg-slate-200 rounded-2xl"></div>
-      <div className="h-40 bg-slate-200 rounded-2xl"></div>
-    </div>
-  </div>;
+  if (loading) return <Loader fullScreen={false} />;
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
-          <p className="text-slate-500">Welcome back! Here's what's happening today.</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
+          <p className="text-slate-500 dark:text-slate-400">Welcome back! Here's what's happening today.</p>
         </div>
         <button 
           onClick={() => navigate('/invoices/new')}
@@ -93,9 +87,9 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Recent Invoices Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-800">Recent Invoices</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-white">Recent Invoices</h2>
           <button 
             onClick={() => navigate('/invoices')}
             className="text-primary font-medium text-sm flex items-center gap-1 hover:underline"
@@ -106,7 +100,7 @@ const Dashboard: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+              <tr className="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
                 <th className="px-6 py-4">Invoice #</th>
                 <th className="px-6 py-4">Customer</th>
                 <th className="px-6 py-4">Date</th>
@@ -114,20 +108,20 @@ const Dashboard: React.FC = () => {
                 <th className="px-6 py-4">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {invoices.slice(0, 5).map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-slate-800">#{invoice.invoiceNo}</td>
-                  <td className="px-6 py-4 text-slate-600">
+                <tr key={invoice.id} className="hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                  <td className="px-6 py-4 font-medium text-slate-800 dark:text-white">#{invoice.invoiceNo}</td>
+                  <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
                     {invoice.customerName || 'Unknown'}
                   </td>
-                  <td className="px-6 py-4 text-slate-600">
+                  <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
                     {invoice.date?.toDate ? invoice.date.toDate().toLocaleDateString() : 'N/A'}
                   </td>
-                  <td className="px-6 py-4 font-bold text-slate-800">${invoice.total.toFixed(2)}</td>
+                  <td className="px-6 py-4 font-bold text-slate-800 dark:text-white">${invoice.total.toFixed(2)}</td>
                   <td className="px-6 py-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      invoice.status === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                      invoice.status === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                     }`}>
                       {invoice.status}
                     </span>
@@ -157,13 +151,13 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-4">
     <div className={`p-4 rounded-xl ${color}`}>
       {icon}
     </div>
     <div>
-      <p className="text-slate-500 text-sm font-medium">{title}</p>
-      <h3 className="text-2xl font-bold text-slate-800">{value}</h3>
+      <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{title}</p>
+      <h3 className="text-2xl font-bold text-slate-800 dark:text-white">{value}</h3>
     </div>
   </div>
 );

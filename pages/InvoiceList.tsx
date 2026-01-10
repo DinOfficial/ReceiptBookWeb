@@ -14,6 +14,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from '../components/Loader';
 
 const InvoiceList: React.FC = () => {
   const { user } = useUser();
@@ -50,14 +51,14 @@ const InvoiceList: React.FC = () => {
     );
   });
 
-  if (loading) return <div>Loading invoices...</div>;
+  if (loading) return <Loader fullScreen={false} />;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Invoices</h1>
-          <p className="text-slate-500">You have {invoices.length} total invoices generated.</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Invoices</h1>
+          <p className="text-slate-500 dark:text-slate-400">You have {invoices.length} total invoices generated.</p>
         </div>
         <button 
           onClick={() => navigate('/invoices/new')}
@@ -69,13 +70,13 @@ const InvoiceList: React.FC = () => {
       </div>
 
       {/* Filters & Search */}
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
+      <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col md:flex-row gap-4 items-center">
         <div className="relative flex-1 w-full">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
           <input
             type="text"
             placeholder="Search by invoice number or customer name..."
-            className="input-primary pl-12"
+            className="input-primary pl-12 dark:bg-slate-700 dark:border-slate-600"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -83,11 +84,11 @@ const InvoiceList: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+              <tr className="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">
                 <th className="px-6 py-4">Invoice #</th>
                 <th className="px-6 py-4">Customer</th>
                 <th className="px-6 py-4">Issued Date</th>
@@ -96,29 +97,29 @@ const InvoiceList: React.FC = () => {
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {filteredInvoices.map((invoice) => {
                 return (
                   <tr 
                     key={invoice.id} 
-                    className="group hover:bg-slate-50 transition-colors cursor-pointer"
+                    className="group hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                     onClick={() => navigate(`/invoices/${invoice.customerId}/${invoice.id}`)}
                   >
                     <td className="px-6 py-4">
-                      <div className="font-bold text-slate-800">#{invoice.invoiceNo}</div>
+                      <div className="font-bold text-slate-800 dark:text-white">#{invoice.invoiceNo}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-800">{invoice.customerName}</div>
+                      <div className="font-medium text-slate-800 dark:text-white">{invoice.customerName}</div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                       {invoice.date?.toDate ? invoice.date.toDate().toLocaleDateString() : 'N/A'}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-bold text-slate-800">${invoice.total.toFixed(2)}</div>
+                      <div className="font-bold text-slate-800 dark:text-white">${invoice.total.toFixed(2)}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        invoice.status === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                        invoice.status === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                       }`}>
                         {invoice.status}
                       </span>

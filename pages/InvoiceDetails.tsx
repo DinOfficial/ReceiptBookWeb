@@ -6,6 +6,7 @@ import { getInvoiceById, deleteInvoice } from '../services/database';
 import { Invoice } from '../types';
 import { InvoicePreview } from '../components/InvoicePreview';
 import { ChevronLeft, Printer, Trash2 } from 'lucide-react';
+import { Loader } from '../components/Loader';
 
 const InvoiceDetails: React.FC = () => {
   const { invoiceId, customerId } = useParams();
@@ -37,19 +38,19 @@ const InvoiceDetails: React.FC = () => {
     window.print();
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader fullScreen={false} />;
   if (!invoice) return <div>Invoice not found</div>;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between print:hidden">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
           <ChevronLeft size={20} /> Back
         </button>
         <div className="flex gap-3">
           <button 
             onClick={handleDelete}
-            className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50"
+            className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
           >
             <Trash2 size={18} /> Delete
           </button>
@@ -69,13 +70,7 @@ const InvoiceDetails: React.FC = () => {
           items={invoice.items}
           subtotal={invoice.subtotal}
           discount={invoice.discount}
-          tax={invoice.tax} // Note: This passed tax amount, preview expects % in text but calculation logic is display only.
-          // Adjust preview logic to accept amount if tax is amount or just display tax amount.
-          // For now, passing tax amount to total calculation inside preview might look doubled if preview recalculates.
-          // Actually, InvoicePreview recalculates totals based on props.
-          // Since we stored calculated values in DB, we should probably pass 0 for calc percentages if we want to show exact DB values,
-          // OR update InvoicePreview to accept "final amounts" instead of recalculating.
-          // For simplicity in this iteration, I will trust the DB values match the calculation logic.
+          tax={invoice.tax}
           total={invoice.total}
         />
       </div>

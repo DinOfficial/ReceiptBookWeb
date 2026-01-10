@@ -14,6 +14,7 @@ import {
   Edit2
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import { Loader } from '../components/Loader';
 
 const CustomerList: React.FC = () => {
   const { user } = useUser();
@@ -99,7 +100,7 @@ const CustomerList: React.FC = () => {
     c.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading && customers.length === 0) return <div>Loading customers...</div>;
+  if (loading && customers.length === 0) return <Loader fullScreen={false} />;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">

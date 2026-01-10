@@ -14,6 +14,7 @@ import {
   Eye
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import { Loader } from '../components/Loader';
 
 const CreateInvoice: React.FC = () => {
   const { user, company } = useUser();
@@ -154,7 +155,7 @@ const CreateInvoice: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="animate-pulse p-8">Loading...</div>;
+  if (loading) return <Loader fullScreen={false} />;
 
   return (
     <div className="h-[calc(100vh-80px)] overflow-hidden flex flex-col">
