@@ -49,6 +49,18 @@ const CreateInvoice: React.FC = () => {
     ? newCustomer.name 
     : customers.find(c => c.id === selectedCustomerId)?.name || '';
 
+  // Use configured payment methods or defaults
+  const availablePaymentMethods = company?.paymentMethods && company.paymentMethods.length > 0 
+    ? company.paymentMethods 
+    : ['Cash', 'Card', 'Bank Transfer'];
+
+  // Initialize paymentSystem with the first available option
+  useEffect(() => {
+    if (availablePaymentMethods.length > 0 && !availablePaymentMethods.includes(paymentSystem)) {
+      setPaymentSystem(availablePaymentMethods[0]);
+    }
+  }, [availablePaymentMethods]);
+
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
@@ -251,8 +263,9 @@ const CreateInvoice: React.FC = () => {
                <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Payment</label>
                   <select className="input-primary dark:bg-slate-700" value={paymentSystem} onChange={(e) => setPaymentSystem(e.target.value)}>
-                    <option value="Cash">Cash</option>
-                    <option value="Card">Card</option>
+                    {availablePaymentMethods.map(method => (
+                      <option key={method} value={method}>{method}</option>
+                    ))}
                   </select>
                </div>
             </div>

@@ -37,12 +37,31 @@ const App: React.FC = () => {
 
   // Load theme preference
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    const applyTheme = () => {
+      const savedTheme = localStorage.getItem('theme') || 'system';
+      const root = document.documentElement;
+      
+      if (savedTheme === 'dark') {
+        root.classList.add('dark');
+      } else if (savedTheme === 'light') {
+        root.classList.remove('dark');
+      } else {
+        // System preference
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      }
+    };
+
+    applyTheme();
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemChange = () => applyTheme();
+    
+    mediaQuery.addEventListener('change', handleSystemChange);
+    return () => mediaQuery.removeEventListener('change', handleSystemChange);
   }, []);
 
   const refreshCompany = async (uid?: string) => {
@@ -83,7 +102,7 @@ const App: React.FC = () => {
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
             
             <Route element={<ProtectedRoute />}>
-              <Route path="/setup" element={company ? <Navigate to="/dashboard" /> : <CompanySetup />} />
+              <Route path="/setup" element={<CompanySetup />} />
               
               <Route element={<CompanyRequiredRoute />}>
                 <Route element={<SidebarLayout />}>
@@ -112,7 +131,9 @@ const ProtectedRoute = () => {
 
 const CompanyRequiredRoute = () => {
   const { company } = useUser();
-  return company ? <Outlet /> : <Navigate to="/setup" />;
+  // Check if we are already on the setup page to avoid infinite redirect loop
+  const isSetupPage = window.location.pathname === '/setup';
+  return company ? <Outlet /> : (isSetupPage ? <Outlet /> : <Navigate to="/setup" />);
 };
 
 export default App;

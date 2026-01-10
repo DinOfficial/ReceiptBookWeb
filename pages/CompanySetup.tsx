@@ -1,14 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from '../App';
-import { createCompany } from '../services/database';
+import { createCompany, updateCompany } from '../services/database';
 import { uploadToImgBB } from '../services/imgbb';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Mail, Phone, MapPin, Upload, ChevronRight, PlusCircle } from 'lucide-react';
+import { Building2, Mail, Phone, MapPin, Upload, ChevronRight, PlusCircle, ArrowLeft } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 
 const CompanySetup: React.FC = () => {
-  const { user, refreshCompany } = useUser();
+  const { user, company, refreshCompany } = useUser();
   const navigate = useNavigate();
   const { success, error } = useToast();
   const [loading, setLoading] = useState(false);
@@ -20,6 +20,21 @@ const CompanySetup: React.FC = () => {
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+
+  // Pre-fill data if company exists (Edit Mode)
+  useEffect(() => {
+    if (company) {
+      setFormData({
+        name: company.name,
+        email: company.email,
+        phone: company.phone,
+        address: company.address,
+      });
+      if (company.photo) {
+        setLogoPreview(company.photo);
+      }
+    }
+  }, [company]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -35,20 +50,34 @@ const CompanySetup: React.FC = () => {
     setLoading(true);
 
     try {
-      let photo = '';
+      let photo = company?.photo || '';
       if (logoFile) {
         photo = await uploadToImgBB(logoFile);
       }
 
-      await createCompany({
-        ...formData,
-        photo,
-        ownerUid: user.uid,
-      });
+      if (company?.id) {
+        // Update existing
+        await updateCompany(user.uid, company.id, {
+          ...formData,
+          photo,
+        });
+        success('Company profile updated!');
+        navigate('/settings');
+      } else {
+        // Create new
+        await createCompany({
+          ...formData,
+          photo,
+          ownerUid: user.uid,
+          currency: '$',
+          paymentMethods: ['Cash', 'Card', 'Bank Transfer'],
+          templateId: 'standard'
+        });
+        success('Welcome! Company profile setup complete.');
+        navigate('/dashboard');
+      }
 
       await refreshCompany();
-      success('Company profile setup complete!');
-      navigate('/');
     } catch (err) {
       console.error(err);
       error('Failed to save company profile.');
@@ -59,12 +88,23 @@ const CompanySetup: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-6">
-      <div className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+      <div className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row relative">
+        {company && (
+          <button 
+            onClick={() => navigate('/settings')}
+            className="absolute top-4 left-4 z-10 p-2 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full text-white transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+        )}
+        
         <div className="md:w-1/3 bg-primary p-8 text-white flex flex-col justify-center">
           <Building2 size={48} className="mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Company Setup</h1>
+          <h1 className="text-2xl font-bold mb-2">{company ? 'Edit Profile' : 'Company Setup'}</h1>
           <p className="text-primary-foreground/80 text-sm leading-relaxed">
-            Welcome! Just a few details about your business to get started with professional invoices.
+            {company 
+              ? 'Update your business details to keep your invoices accurate and professional.' 
+              : 'Welcome! Just a few details about your business to get started with professional invoices.'}
           </p>
         </div>
 
@@ -160,7 +200,7 @@ const CompanySetup: React.FC = () => {
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
-                  Complete Setup <ChevronRight size={20} />
+                  {company ? 'Update Profile' : 'Complete Setup'} <ChevronRight size={20} />
                 </>
               )}
             </button>

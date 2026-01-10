@@ -8,7 +8,9 @@ export interface Company {
   phone: string;
   address: string;
   photo: string;
-  templateId?: 'standard' | 'minimal' | 'modern';
+  templateId?: 'standard' | 'minimal' | 'modern' | 'classic';
+  currency?: string;
+  paymentMethods?: string[];
 }
 
 export interface Customer {

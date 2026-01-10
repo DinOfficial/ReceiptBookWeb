@@ -12,7 +12,8 @@ import {
   orderBy,
   limit,
   Timestamp,
-  serverTimestamp
+  serverTimestamp,
+  writeBatch
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Company, Customer, Invoice } from '../types';
@@ -54,10 +55,20 @@ export const updateCustomer = async (uid: string, customerId: string, data: Part
 };
 
 export const deleteCustomer = async (uid: string, customerId: string) => {
-  // Note: This does not recursively delete subcollections (invoices) in standard Firestore client.
-  // In a real production app, use a Cloud Function to handle recursive delete.
-  const docRef = doc(db, 'users', uid, 'customers', customerId);
-  return await deleteDoc(docRef);
+  // Cascading delete: First delete all invoices for this customer
+  const invoicesRef = collection(db, 'users', uid, 'customers', customerId, 'invoices');
+  const invoicesSnapshot = await getDocs(invoicesRef);
+  
+  const batch = writeBatch(db);
+  invoicesSnapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+  
+  // Delete the customer document
+  const customerRef = doc(db, 'users', uid, 'customers', customerId);
+  batch.delete(customerRef);
+  
+  await batch.commit();
 };
 
 // Invoice Services
