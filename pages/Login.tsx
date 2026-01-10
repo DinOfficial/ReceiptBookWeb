@@ -6,8 +6,9 @@ import {
   createUserWithEmailAndPassword, 
   signInWithPopup
 } from 'firebase/auth';
-import { Mail, Lock, Chrome, AlertCircle, Receipt } from 'lucide-react';
+import { Mail, Lock, Chrome, AlertCircle } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import { Logo } from '../components/Logo';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -48,7 +49,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <div className="h-16 w-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 mx-auto mb-6">
-            <Receipt className="text-white" size={32} />
+            <Logo className="text-white" size={32} />
           </div>
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Welcome Back</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-2">Manage your business invoices with ease</p>

@@ -6,6 +6,7 @@ import { uploadToImgBB } from '../services/imgbb';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Mail, Phone, MapPin, Upload, ChevronRight, PlusCircle, ArrowLeft } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import { Logo } from '../components/Logo';
 
 const CompanySetup: React.FC = () => {
   const { user, company, refreshCompany } = useUser();
@@ -99,7 +100,7 @@ const CompanySetup: React.FC = () => {
         )}
         
         <div className="md:w-1/3 bg-primary p-8 text-white flex flex-col justify-center">
-          <Building2 size={48} className="mb-4" />
+          <Logo className="text-white mb-4" size={48} />
           <h1 className="text-2xl font-bold mb-2">{company ? 'Edit Profile' : 'Company Setup'}</h1>
           <p className="text-primary-foreground/80 text-sm leading-relaxed">
             {company 

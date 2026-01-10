@@ -98,8 +98,8 @@ const App: React.FC = () => {
       <UserContext.Provider value={{ user, company, loading, refreshCompany }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+            <Route path="/" element={<RootRoute />} />
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" replace />} />
             
             <Route element={<ProtectedRoute />}>
               <Route path="/setup" element={<CompanySetup />} />
@@ -116,7 +116,7 @@ const App: React.FC = () => {
               </Route>
             </Route>
             
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
@@ -124,16 +124,25 @@ const App: React.FC = () => {
   );
 };
 
+const RootRoute = () => {
+  const { user, company } = useUser();
+  if (user) {
+    // If logged in, redirect based on company existence
+    return company ? <Navigate to="/dashboard" replace /> : <Navigate to="/setup" replace />;
+  }
+  return <Landing />;
+};
+
 const ProtectedRoute = () => {
   const { user } = useUser();
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 const CompanyRequiredRoute = () => {
   const { company } = useUser();
   // Check if we are already on the setup page to avoid infinite redirect loop
   const isSetupPage = window.location.pathname === '/setup';
-  return company ? <Outlet /> : (isSetupPage ? <Outlet /> : <Navigate to="/setup" />);
+  return company ? <Outlet /> : (isSetupPage ? <Outlet /> : <Navigate to="/setup" replace />);
 };
 
 export default App;

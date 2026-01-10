@@ -10,13 +10,14 @@ import {
   ShieldCheck, 
   BarChart3, 
   ArrowRight,
-  Receipt,
   Download,
   Play,
   Apple,
   Menu,
-  X
+  X,
+  Receipt
 } from 'lucide-react';
+import { Logo } from '../components/Logo';
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -37,40 +38,40 @@ const Landing: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="min-h-screen bg-white dark:bg-slate-900 overflow-x-hidden transition-colors">
       {/* Navigation */}
       <motion.nav 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-        className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg z-50 border-b border-slate-100"
+        className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg z-50 border-b border-slate-100 dark:border-slate-800"
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-              <Receipt className="text-white" size={24} />
+              <Logo className="text-white" size={24} />
             </div>
-            <span className="text-xl font-extrabold text-slate-800 tracking-tight hidden sm:block">Receipt Book</span>
+            <span className="text-xl font-extrabold text-slate-800 dark:text-white tracking-tight hidden sm:block">Receipt Book</span>
           </div>
           
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-slate-600 font-medium hover:text-primary transition-colors">Features</a>
-            <a href="#growth" className="text-slate-600 font-medium hover:text-primary transition-colors">Growth</a>
-            <a href="#mobile" className="text-slate-600 font-medium hover:text-primary transition-colors">Mobile</a>
+            <a href="#features" className="text-slate-600 dark:text-slate-300 font-medium hover:text-primary transition-colors">Features</a>
+            <a href="#growth" className="text-slate-600 dark:text-slate-300 font-medium hover:text-primary transition-colors">Growth</a>
+            <a href="#mobile" className="text-slate-600 dark:text-slate-300 font-medium hover:text-primary transition-colors">Mobile</a>
           </div>
 
           <div className="flex items-center gap-4">
             {user ? (
                <div className="flex items-center gap-4">
                   <div className="hidden md:flex text-right flex-col">
-                    <span className="text-sm font-bold text-slate-800">{company?.name || user.email}</span>
+                    <span className="text-sm font-bold text-slate-800 dark:text-white">{company?.name || user.email}</span>
                     <span className="text-xs text-primary font-medium">Pro Plan</span>
                   </div>
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate('/dashboard')}
-                    className="bg-slate-900 text-white px-5 py-2.5 rounded-full font-bold shadow-lg hover:bg-slate-800 transition-all flex items-center gap-2"
+                    className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2.5 rounded-full font-bold shadow-lg hover:bg-slate-800 dark:hover:bg-slate-200 transition-all flex items-center gap-2"
                   >
                     Dashboard
                     <ArrowRight size={16} />
@@ -78,7 +79,7 @@ const Landing: React.FC = () => {
                </div>
             ) : (
               <div className="flex items-center gap-3">
-                <button onClick={() => navigate('/login')} className="hidden md:block text-slate-600 font-bold hover:text-primary">Log In</button>
+                <button onClick={() => navigate('/login')} className="hidden md:block text-slate-600 dark:text-slate-300 font-bold hover:text-primary">Log In</button>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -89,7 +90,7 @@ const Landing: React.FC = () => {
                 </motion.button>
               </div>
             )}
-            <button className="md:hidden text-slate-600" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <button className="md:hidden text-slate-600 dark:text-slate-300" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 {mobileMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
@@ -100,11 +101,11 @@ const Landing: React.FC = () => {
           <motion.div 
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
-            className="md:hidden bg-white border-b border-slate-100 px-6 py-4 space-y-4"
+            className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 px-6 py-4 space-y-4"
           >
-            <a href="#features" className="block text-slate-600 font-medium" onClick={() => setMobileMenuOpen(false)}>Features</a>
-            <a href="#growth" className="block text-slate-600 font-medium" onClick={() => setMobileMenuOpen(false)}>Growth</a>
-            <a href="#mobile" className="block text-slate-600 font-medium" onClick={() => setMobileMenuOpen(false)}>Mobile</a>
+            <a href="#features" className="block text-slate-600 dark:text-slate-300 font-medium" onClick={() => setMobileMenuOpen(false)}>Features</a>
+            <a href="#growth" className="block text-slate-600 dark:text-slate-300 font-medium" onClick={() => setMobileMenuOpen(false)}>Growth</a>
+            <a href="#mobile" className="block text-slate-600 dark:text-slate-300 font-medium" onClick={() => setMobileMenuOpen(false)}>Mobile</a>
             {!user && (
                <button onClick={() => navigate('/login')} className="block w-full text-left text-primary font-bold">Log In</button>
             )}
@@ -115,8 +116,8 @@ const Landing: React.FC = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
         {/* Abstract Background Blobs */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-3xl -z-10 animate-float" style={{ animationDuration: '10s' }} />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-100/50 rounded-full blur-3xl -z-10 animate-float" style={{ animationDuration: '15s' }} />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100/50 dark:bg-blue-900/20 rounded-full blur-3xl -z-10 animate-float" style={{ animationDuration: '10s' }} />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-100/50 dark:bg-purple-900/20 rounded-full blur-3xl -z-10 animate-float" style={{ animationDuration: '15s' }} />
 
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <motion.div 
@@ -129,18 +130,18 @@ const Landing: React.FC = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-100 shadow-sm rounded-full text-sm font-bold text-slate-600"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full text-sm font-bold text-slate-600 dark:text-slate-300"
             >
               <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
               v2.0 is now live
             </motion.div>
             
-            <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight">
+            <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tight">
               Invoicing <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Reimagined.</span>
             </h1>
             
-            <p className="text-xl text-slate-500 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-xl text-slate-500 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Create professional invoices in seconds, track payments effortlessly, and manage your business on the go.
             </p>
             
@@ -157,9 +158,9 @@ const Landing: React.FC = () => {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
+                className="px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white rounded-2xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2"
               >
-                <Play size={20} className="fill-slate-700" />
+                <Play size={20} className="fill-slate-700 dark:fill-white" />
                 Demo Video
               </motion.button>
             </div>
@@ -172,7 +173,7 @@ const Landing: React.FC = () => {
             transition={{ duration: 0.8, type: 'spring' }}
             className="relative mx-auto w-full max-w-[500px] lg:max-w-none"
           >
-            <div className="relative z-10 bg-white rounded-3xl shadow-2xl shadow-slate-200/50 border border-slate-100 p-2 overflow-hidden">
+            <div className="relative z-10 bg-white dark:bg-slate-800 rounded-3xl shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 p-2 overflow-hidden">
                <img 
                  src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=1000" 
                  alt="Dashboard Preview" 
@@ -183,14 +184,14 @@ const Landing: React.FC = () => {
                <motion.div 
                  animate={{ y: [0, -10, 0] }}
                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                 className="absolute -left-6 top-10 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 hidden md:flex items-center gap-3"
+                 className="absolute -left-6 top-10 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 hidden md:flex items-center gap-3"
                >
                  <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle2 className="text-green-600" size={20} />
                  </div>
                  <div>
                     <div className="text-xs text-slate-400 font-bold uppercase">Payment Received</div>
-                    <div className="text-lg font-bold text-slate-800">$1,250.00</div>
+                    <div className="text-lg font-bold text-slate-800 dark:text-white">$1,250.00</div>
                  </div>
                </motion.div>
 
@@ -198,14 +199,14 @@ const Landing: React.FC = () => {
                <motion.div 
                  animate={{ y: [0, 10, 0] }}
                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                 className="absolute -right-6 bottom-20 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 hidden md:flex items-center gap-3"
+                 className="absolute -right-6 bottom-20 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 hidden md:flex items-center gap-3"
                >
                  <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
                     <Smartphone className="text-primary" size={20} />
                  </div>
                  <div>
                     <div className="text-xs text-slate-400 font-bold uppercase">Mobile Sync</div>
-                    <div className="text-sm font-bold text-slate-800">Active</div>
+                    <div className="text-sm font-bold text-slate-800 dark:text-white">Active</div>
                  </div>
                </motion.div>
             </div>
@@ -214,7 +215,7 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Designed for Growth Section */}
-      <section id="growth" className="py-24 bg-white">
+      <section id="growth" className="py-24 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
              <motion.div 
@@ -235,7 +236,7 @@ const Landing: React.FC = () => {
                    </div>
                 </div>
                 {/* Decorative Pattern */}
-                <div className="absolute -top-10 -left-10 w-40 h-40 bg-slate-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                <div className="absolute -top-10 -left-10 w-40 h-40 bg-slate-100 dark:bg-slate-800 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
              </motion.div>
 
@@ -243,8 +244,8 @@ const Landing: React.FC = () => {
                {...fadeInUp}
                className="order-1 lg:order-2 space-y-8"
              >
-                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">Designed for <span className="text-primary">Growth</span></h2>
-                <p className="text-lg text-slate-500 leading-relaxed">
+                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight">Designed for <span className="text-primary">Growth</span></h2>
+                <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
                   Scale your operations without the headache. Whether you're a freelancer or a growing agency, we provide the tools you need to look professional and get paid faster.
                 </p>
 
@@ -264,12 +265,12 @@ const Landing: React.FC = () => {
                     <motion.div 
                       key={idx}
                       variants={fadeInUp}
-                      className="flex items-center gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors cursor-default group"
+                      className="flex items-center gap-4 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-default group"
                     >
                       <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                         <CheckCircle2 size={18} className="text-green-600" />
                       </div>
-                      <span className="font-bold text-slate-700 text-lg">{feature}</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-200 text-lg">{feature}</span>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -400,15 +401,15 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 bg-slate-50">
+      <section id="features" className="py-24 bg-slate-50 dark:bg-slate-800/50">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-center mb-16 space-y-4"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Why businesses love us</h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">Everything you need to manage your business financials in one place.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Why businesses love us</h2>
+            <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">Everything you need to manage your business financials in one place.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -447,16 +448,16 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-white border-t border-slate-100">
+      <footer className="py-12 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-             <div className="h-8 w-8 bg-slate-900 rounded-lg flex items-center justify-center">
-              <Receipt className="text-white" size={18} />
+             <div className="h-8 w-8 bg-slate-900 dark:bg-white rounded-lg flex items-center justify-center">
+              <Logo className="text-white dark:text-slate-900" size={18} />
             </div>
-            <span className="font-bold text-slate-800">Receipt Book</span>
+            <span className="font-bold text-slate-800 dark:text-white">Receipt Book</span>
           </div>
           <p className="text-slate-400 text-sm">© 2024 Receipt Book Inc. All rights reserved.</p>
-          <div className="flex gap-6 text-sm font-medium text-slate-600">
+          <div className="flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
           </div>
@@ -472,13 +473,13 @@ const FeatureCard = ({ icon, title, description }: { icon: any, title: string, d
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     whileHover={{ y: -5 }}
-    className="bg-white p-8 rounded-3xl border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all group"
+    className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 hover:shadow-xl hover:shadow-primary/5 transition-all group"
   >
-    <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/10 transition-all duration-300">
+    <div className="w-14 h-14 bg-slate-50 dark:bg-slate-700 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/10 transition-all duration-300">
       {React.cloneElement(icon, { size: 28 })}
     </div>
-    <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
-    <p className="text-slate-500 leading-relaxed text-sm">{description}</p>
+    <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-3">{title}</h3>
+    <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">{description}</p>
   </motion.div>
 );
 
