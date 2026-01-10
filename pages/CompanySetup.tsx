@@ -5,10 +5,12 @@ import { createCompany } from '../services/database';
 import { uploadToImgBB } from '../services/imgbb';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Mail, Phone, MapPin, Upload, ChevronRight, PlusCircle } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 const CompanySetup: React.FC = () => {
   const { user, refreshCompany } = useUser();
   const navigate = useNavigate();
+  const { success, error } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -45,18 +47,19 @@ const CompanySetup: React.FC = () => {
       });
 
       await refreshCompany();
+      success('Company profile setup complete!');
       navigate('/');
     } catch (err) {
       console.error(err);
-      alert('Failed to save company profile.');
+      error('Failed to save company profile.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="max-w-2xl w-full bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-6">
+      <div className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
         <div className="md:w-1/3 bg-primary p-8 text-white flex flex-col justify-center">
           <Building2 size={48} className="mb-4" />
           <h1 className="text-2xl font-bold mb-2">Company Setup</h1>
@@ -69,7 +72,7 @@ const CompanySetup: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex justify-center mb-8">
               <label className="relative cursor-pointer group">
-                <div className="w-24 h-24 rounded-2xl bg-slate-100 border-2 border-dashed border-primary/30 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary">
+                <div className="w-24 h-24 rounded-2xl bg-slate-100 dark:bg-slate-700 border-2 border-dashed border-primary/30 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary">
                   {logoPreview ? (
                     <img src={logoPreview} alt="Logo Preview" className="w-full h-full object-cover" />
                   ) : (

@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
@@ -39,6 +40,10 @@
         background-color: #f8fafc;
         overflow-x: hidden;
       }
+      .dark body {
+        background-color: #0f172a;
+        color: #f8fafc;
+      }
       .input-primary {
         background-color: transparent;
         border: 1px solid #2692CE;
@@ -47,6 +52,10 @@
         width: 100%;
         transition: all 0.2s;
         color: #334155;
+      }
+      .dark .input-primary {
+        color: #e2e8f0;
+        border-color: #38bdf8;
       }
       .input-primary:focus {
         outline: none;
@@ -82,11 +91,11 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
     "firebase/": "https://esm.sh/firebase@^12.7.0/",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "framer-motion": "https://esm.sh/framer-motion@^12.25.0",
     "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.25.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>

@@ -9,17 +9,16 @@ import { InvoicePreview } from '../components/InvoicePreview';
 import { 
   Plus, 
   Trash2, 
-  Calendar, 
   UserPlus, 
-  FileCheck, 
-  Calculator,
   ChevronLeft,
   Eye
 } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 const CreateInvoice: React.FC = () => {
   const { user, company } = useUser();
   const navigate = useNavigate();
+  const { success, error } = useToast();
   
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,15 +133,16 @@ const CreateInvoice: React.FC = () => {
         total,
       }, user.uid);
 
+      success('Invoice created successfully!');
       navigate('/invoices');
     } catch (err: any) {
-      alert(err.message);
+      error(err.message || 'Failed to create invoice');
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) return <div className="animate-pulse">Loading...</div>;
+  if (loading) return <div className="animate-pulse p-8">Loading...</div>;
 
   return (
     <div className="h-[calc(100vh-80px)] overflow-hidden flex flex-col">
@@ -152,7 +152,7 @@ const CreateInvoice: React.FC = () => {
             <ChevronLeft size={24} />
             </button>
             <div>
-            <h1 className="text-2xl font-bold text-slate-800">Create New Invoice</h1>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Create New Invoice</h1>
             </div>
         </div>
         <button 
@@ -168,7 +168,7 @@ const CreateInvoice: React.FC = () => {
         <div className={`flex-1 overflow-y-auto pb-20 lg:pb-0 ${showMobilePreview ? 'hidden lg:block' : 'block'}`}>
           <form onSubmit={handleSave} className="space-y-6 max-w-2xl">
             {/* Customer Section */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-6">
               <div className="flex items-center gap-2 text-primary font-bold mb-2">
                 <UserPlus size={20} />
                 <span>Customer Information</span>
@@ -193,7 +193,7 @@ const CreateInvoice: React.FC = () => {
 
               {!isAddingNewCustomer ? (
                 <select
-                  className="input-primary"
+                  className="input-primary dark:bg-slate-700"
                   value={selectedCustomerId}
                   onChange={(e) => setSelectedCustomerId(e.target.value)}
                   required={!isAddingNewCustomer}
@@ -232,25 +232,25 @@ const CreateInvoice: React.FC = () => {
             </div>
 
             {/* Invoice Details */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 grid grid-cols-2 gap-4">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 grid grid-cols-2 gap-4">
                <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Invoice #</label>
                   <input className="input-primary" value={invoiceNo} onChange={(e) => setInvoiceNo(e.target.value)} required />
                </div>
                <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Date</label>
-                  <input type="date" className="input-primary" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} required />
+                  <input type="date" className="input-primary dark:text-slate-400" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} required />
                </div>
                <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Status</label>
-                  <select className="input-primary" value={status} onChange={(e) => setStatus(e.target.value)}>
+                  <select className="input-primary dark:bg-slate-700" value={status} onChange={(e) => setStatus(e.target.value)}>
                     <option value="Paid">Paid</option>
                     <option value="Unpaid">Unpaid</option>
                   </select>
                </div>
                <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Payment</label>
-                  <select className="input-primary" value={paymentSystem} onChange={(e) => setPaymentSystem(e.target.value)}>
+                  <select className="input-primary dark:bg-slate-700" value={paymentSystem} onChange={(e) => setPaymentSystem(e.target.value)}>
                     <option value="Cash">Cash</option>
                     <option value="Card">Card</option>
                   </select>
@@ -258,14 +258,14 @@ const CreateInvoice: React.FC = () => {
             </div>
 
             {/* Items */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
                <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-bold text-slate-700">Items</h3>
-                  <button type="button" onClick={addItem} className="text-primary hover:bg-slate-50 p-2 rounded"><Plus size={18}/></button>
+                  <h3 className="font-bold text-slate-700 dark:text-slate-300">Items</h3>
+                  <button type="button" onClick={addItem} className="text-primary hover:bg-slate-50 dark:hover:bg-slate-700 p-2 rounded"><Plus size={18}/></button>
                </div>
                <div className="space-y-4">
                 {items.map((item, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-end border-b border-slate-50 pb-2">
+                  <div key={index} className="grid grid-cols-12 gap-2 items-end border-b border-slate-50 dark:border-slate-700 pb-2">
                     <div className="col-span-5">
                       <input placeholder="Item" className="input-primary text-sm py-2" value={item.name} onChange={(e) => handleItemChange(index, 'name', e.target.value)} required />
                     </div>
@@ -276,7 +276,7 @@ const CreateInvoice: React.FC = () => {
                       <input type="number" className="input-primary text-sm py-2 px-1" value={item.price} onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value) || 0)} />
                     </div>
                     <div className="col-span-2 flex items-center justify-between">
-                       <span className="text-xs font-bold text-slate-600">${item.total.toFixed(0)}</span>
+                       <span className="text-xs font-bold text-slate-600 dark:text-slate-400">${item.total.toFixed(0)}</span>
                        <button type="button" onClick={() => removeItem(index)} className="text-red-400 hover:text-red-600"><Trash2 size={16} /></button>
                     </div>
                   </div>
@@ -285,16 +285,16 @@ const CreateInvoice: React.FC = () => {
             </div>
 
             {/* Totals Input */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-                <div className="flex justify-between items-center">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-4">
+                <div className="flex justify-between items-center dark:text-slate-300">
                     <span>Discount (%)</span>
                     <input type="number" className="input-primary w-20 text-right" value={discount} onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)} />
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center dark:text-slate-300">
                     <span>Tax (%)</span>
                     <input type="number" className="input-primary w-20 text-right" value={tax} onChange={(e) => setTax(parseFloat(e.target.value) || 0)} />
                 </div>
-                <div className="pt-4 border-t border-slate-100 flex justify-between items-center text-xl font-bold text-primary">
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center text-xl font-bold text-primary">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
@@ -311,7 +311,7 @@ const CreateInvoice: React.FC = () => {
         </div>
 
         {/* Right Column - Live Preview */}
-        <div className={`flex-1 bg-slate-200/50 rounded-2xl overflow-y-auto p-4 lg:p-8 ${showMobilePreview ? 'block fixed inset-0 z-50 bg-slate-100' : 'hidden lg:block'}`}>
+        <div className={`flex-1 bg-slate-200/50 dark:bg-slate-900 rounded-2xl overflow-y-auto p-4 lg:p-8 ${showMobilePreview ? 'block fixed inset-0 z-50 bg-slate-100' : 'hidden lg:block'}`}>
             {showMobilePreview && (
                 <button onClick={() => setShowMobilePreview(false)} className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-lg">
                     <Trash2 className="rotate-45" size={24} />

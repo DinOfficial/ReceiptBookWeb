@@ -8,6 +8,7 @@ export interface Company {
   phone: string;
   address: string;
   photo: string;
+  templateId?: 'standard' | 'minimal' | 'modern';
 }
 
 export interface Customer {
