@@ -7,6 +7,8 @@ import { getCompanyByOwner } from './services/database';
 import { Company, UserContextType } from './types';
 import { ToastProvider } from './context/ToastContext';
 import { Loader } from './components/Loader';
+import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 // Pages
 import Landing from './pages/Landing';
@@ -36,35 +38,6 @@ const App: React.FC = () => {
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load theme preference
-  useEffect(() => {
-    const applyTheme = () => {
-      const savedTheme = localStorage.getItem('theme') || 'system';
-      const root = document.documentElement;
-      
-      if (savedTheme === 'dark') {
-        root.classList.add('dark');
-      } else if (savedTheme === 'light') {
-        root.classList.remove('dark');
-      } else {
-        // System preference
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
-      }
-    };
-
-    applyTheme();
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleSystemChange = () => applyTheme();
-    
-    mediaQuery.addEventListener('change', handleSystemChange);
-    return () => mediaQuery.removeEventListener('change', handleSystemChange);
-  }, []);
-
   const refreshCompany = async (uid?: string) => {
     const userId = uid || user?.uid;
     if (userId) {
@@ -91,41 +64,45 @@ const App: React.FC = () => {
   }
 
   return (
-    <ToastProvider>
-      <UserContext.Provider value={{ user, company, loading, refreshCompany }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<RootRoute />} />
-            <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" replace />} />
-            
-            <Route element={<ProtectedRoute />}>
-              <Route path="/setup" element={<CompanySetup />} />
-              
-              <Route element={<CompanyRequiredRoute />}>
-                <Route element={<SidebarLayout />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/invoices" element={<InvoiceList />} />
-                  <Route path="/invoices/new" element={<CreateInvoice />} />
-                  <Route path="/invoices/:customerId/:invoiceId" element={<InvoiceDetails />} />
-                  <Route path="/customers" element={<CustomerList />} />
-                  <Route path="/settings" element={<Settings />} />
+    <ThemeProvider>
+      <LanguageProvider>
+        <ToastProvider>
+          <UserContext.Provider value={{ user, company, loading, refreshCompany }}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<RootRoute />} />
+                <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" replace />} />
+                
+                <Route element={<ProtectedRoute />}>
+                  {/* Dashboard and Main App Routes - No longer requires company check for access */}
+                  <Route element={<SidebarLayout />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/invoices" element={<InvoiceList />} />
+                    <Route path="/invoices/new" element={<CreateInvoice />} />
+                    <Route path="/invoices/:customerId/:invoiceId" element={<InvoiceDetails />} />
+                    <Route path="/customers" element={<CustomerList />} />
+                    <Route path="/settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Setup Route */}
+                  <Route path="/setup" element={<CompanySetup />} />
                 </Route>
-              </Route>
-            </Route>
-            
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
-      </UserContext.Provider>
-    </ToastProvider>
+                
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </BrowserRouter>
+          </UserContext.Provider>
+        </ToastProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 };
 
 const RootRoute = () => {
-  const { user, company } = useUser();
+  const { user } = useUser();
+  // Redirect strictly based on login status, ignoring company existence
   if (user) {
-    // If logged in, redirect based on company existence
-    return company ? <Navigate to="/dashboard" replace /> : <Navigate to="/setup" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
   return <Landing />;
 };
@@ -133,13 +110,6 @@ const RootRoute = () => {
 const ProtectedRoute = () => {
   const { user } = useUser();
   return user ? <Outlet /> : <Navigate to="/login" replace />;
-};
-
-const CompanyRequiredRoute = () => {
-  const { company } = useUser();
-  // Check if we are already on the setup page to avoid infinite redirect loop
-  const isSetupPage = window.location.pathname === '/setup';
-  return company ? <Outlet /> : (isSetupPage ? <Outlet /> : <Navigate to="/setup" replace />);
 };
 
 export default App;
