@@ -6,19 +6,15 @@ import { motion } from 'framer-motion';
 import { 
   CheckCircle2, 
   Smartphone, 
-  Cloud, 
-  ShieldCheck, 
-  BarChart3, 
-  ArrowRight,
-  Download,
   Play,
-  Apple,
+  ArrowRight,
   Menu,
   X,
-  Receipt,
   Sun,
   Moon,
-  Globe
+  Globe,
+  Wifi,
+  Apple
 } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { useTheme } from '../context/ThemeContext';
@@ -296,6 +292,73 @@ const Landing: React.FC = () => {
                     </motion.div>
                   ))}
                 </motion.div>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile App Section */}
+      <section id="mobile" className="py-24 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+             <motion.div 
+               {...fadeInUp}
+               className="space-y-8 order-2 lg:order-2"
+             >
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-bold">
+                    <Wifi size={16} />
+                    <span>Always Online</span>
+                </div>
+                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
+                    {t('mobileSectionTitle')}
+                </h2>
+                <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {t('mobileSectionDesc')}
+                </p>
+                <div className={`flex flex-col sm:flex-row gap-4 ${isRTL ? 'lg:flex-row-reverse' : ''}`}>
+                    <button className="flex items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition-colors">
+                        <Apple size={24} />
+                        <div className="text-left">
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Download on the</div>
+                            <div className="font-bold leading-none">App Store</div>
+                        </div>
+                    </button>
+                    <button className="flex items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-xl hover:bg-slate-800 transition-colors">
+                        <Play size={24} className="fill-white" />
+                        <div className="text-left">
+                            <div className="text-[10px] uppercase font-bold text-slate-400">Get it on</div>
+                            <div className="font-bold leading-none">Google Play</div>
+                        </div>
+                    </button>
+                </div>
+             </motion.div>
+
+             <motion.div 
+               {...fadeInUp}
+               className="relative order-1 lg:order-1 flex justify-center"
+             >
+                {/* Phone Mockup */}
+                <div className="relative z-10 w-[300px] h-[600px] bg-slate-900 rounded-[3rem] border-8 border-slate-900 shadow-2xl overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-6 bg-slate-900 z-20 flex justify-center">
+                        <div className="w-32 h-4 bg-black rounded-b-xl"></div>
+                    </div>
+                    <img 
+                        src="https://images.unsplash.com/photo-1616469829941-c7200edec809?auto=format&fit=crop&q=80&w=1000" 
+                        alt="Mobile App" 
+                        className="w-full h-full object-cover opacity-80"
+                    />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-white">
+                        <div className="h-16 w-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 mb-6">
+                            <Logo className="text-white" size={32} />
+                        </div>
+                        <h3 className="text-2xl font-bold mb-2">Receipt Book</h3>
+                        <p className="text-white/70">Your business in your pocket.</p>
+                    </div>
+                </div>
+                
+                {/* Decorative Circles behind phone */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-slate-200 dark:border-slate-700 rounded-full -z-10"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-slate-200 dark:border-slate-700 rounded-full -z-10 opacity-50"></div>
              </motion.div>
           </div>
         </div>

@@ -51,6 +51,8 @@ export const translations = {
     active: 'Active',
     whyLoveUs: 'Why businesses love us',
     footerRights: '© 2024 Receipt Book Inc. All rights reserved.',
+    mobileSectionTitle: 'Manage from anywhere',
+    mobileSectionDesc: 'Our fully responsive design ensures you can create invoices, track payments, and manage customers directly from your smartphone.',
     
     // Dashboard
     welcomeMessage: "Welcome back! Here's what's happening today.",
@@ -188,6 +190,8 @@ export const translations = {
     active: 'সক্রিয়',
     whyLoveUs: 'কেন ব্যবসায়ীরা আমাদের পছন্দ করেন',
     footerRights: '© ২০২৪ রিসিট বুক ইনকর্পোরেটেড। সর্বস্বত্ব সংরক্ষিত।',
+    mobileSectionTitle: 'যে কোনো জায়গা থেকে পরিচালনা করুন',
+    mobileSectionDesc: 'আমাদের রেস্পন্সিভ ডিজাইনের মাধ্যমে আপনি স্মার্টফোন থেকেই ইনভয়েস তৈরি, পেমেন্ট ট্র্যাক এবং কাস্টমার ম্যানেজ করতে পারবেন।',
 
     // Dashboard
     welcomeMessage: 'স্বাগতম! আজ এখানে কি হচ্ছে।',
@@ -325,6 +329,8 @@ export const translations = {
     active: 'نشط',
     whyLoveUs: 'لماذا تحبنا الشركات',
     footerRights: '© 2024 Receipt Book Inc. جميع الحقوق محفوظة.',
+    mobileSectionTitle: 'إدارة من أي مكان',
+    mobileSectionDesc: 'يضمن تصميمنا المتجاوب بالكامل إمكانية إنشاء الفواتير وتتبع المدفوعات وإدارة العملاء مباشرة من هاتفك الذكي.',
 
     // Dashboard
     welcomeMessage: 'مرحبًا بعودتك! إليك ما يحدث اليوم.',
