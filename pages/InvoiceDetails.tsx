@@ -7,6 +7,7 @@ import { Invoice } from '../types';
 import { InvoicePreview } from '../components/InvoicePreview';
 import { ChevronLeft, Printer, Trash2 } from 'lucide-react';
 import { Loader } from '../components/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const InvoiceDetails: React.FC = () => {
   const { invoiceId, customerId } = useParams();
@@ -14,6 +15,7 @@ const InvoiceDetails: React.FC = () => {
   const navigate = useNavigate();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t, isRTL } = useLanguage();
 
   useEffect(() => {
     const loadInvoice = async () => {
@@ -28,7 +30,7 @@ const InvoiceDetails: React.FC = () => {
 
   const handleDelete = async () => {
     if (!user || !invoice || !invoice.customerId) return;
-    if (confirm('Are you sure you want to delete this invoice? This action cannot be undone.')) {
+    if (confirm(t('deleteInvoiceConfirm'))) {
         await deleteInvoice(user.uid, invoice.customerId, invoice.id!);
         navigate('/invoices');
     }
@@ -42,21 +44,21 @@ const InvoiceDetails: React.FC = () => {
   if (!invoice) return <div>Invoice not found</div>;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between print:hidden">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
-          <ChevronLeft size={20} /> Back
+    <div className={`max-w-7xl mx-auto space-y-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+      <div className={`flex items-center justify-between print:hidden ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <button onClick={() => navigate(-1)} className={`flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <ChevronLeft size={20} className={isRTL ? 'rotate-180' : ''} /> {t('back')}
         </button>
         <div className="flex gap-3">
           <button 
             onClick={handleDelete}
-            className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+            className={`flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 ${isRTL ? 'flex-row-reverse' : ''}`}
           >
-            <Trash2 size={18} /> Delete
+            <Trash2 size={18} /> {t('delete')}
           </button>
           <button 
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 shadow-md"
+            className={`flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 shadow-md ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <Printer size={18} /> Print / Save PDF
           </button>

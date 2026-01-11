@@ -9,6 +9,7 @@ import {
 import { Mail, Lock, Chrome, AlertCircle } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { Logo } from '../components/Logo';
+import { useLanguage } from '../context/LanguageContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ const Login: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [loading, setLoading] = useState(false);
   const { error, success } = useToast();
+  const { t, isRTL } = useLanguage();
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ const Login: React.FC = () => {
         success('Account created successfully!');
       } else {
         await signInWithEmailAndPassword(auth, email, password);
-        success('Welcome back!');
+        success(t('welcomeBack'));
       }
     } catch (err: any) {
       error(err.message || 'Authentication failed');
@@ -45,27 +47,27 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
+    <div className={`min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4 ${isRTL ? 'text-right' : 'text-left'}`}>
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <div className="h-16 w-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 mx-auto mb-6">
             <Logo className="text-white" size={32} />
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Welcome Back</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2">Manage your business invoices with ease</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{t('welcomeBack')}</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-2">{t('manageBusiness')}</p>
         </div>
 
         <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700">
           <form onSubmit={handleEmailAuth} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{t('emailLabel')}</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
+                <Mail className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 -translate-y-1/2 text-primary`} size={20} />
                 <input
                   type="email"
                   required
-                  placeholder="Enter your email"
-                  className="input-primary pl-12"
+                  placeholder={t('enterEmail')}
+                  className={`input-primary ${isRTL ? 'pr-12' : 'pl-12'}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -73,14 +75,14 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Password</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{t('passwordLabel')}</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
+                <Lock className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 -translate-y-1/2 text-primary`} size={20} />
                 <input
                   type="password"
                   required
-                  placeholder="Enter your password"
-                  className="input-primary pl-12"
+                  placeholder={t('enterPassword')}
+                  className={`input-primary ${isRTL ? 'pr-12' : 'pl-12'}`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -90,12 +92,12 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+              className={`w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all flex items-center justify-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}
             >
               {loading ? (
                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
-                <>{isRegistering ? 'Create Account' : 'Sign In'}</>
+                <>{isRegistering ? t('createAccount') : t('signIn')}</>
               )}
             </button>
           </form>
@@ -109,19 +111,19 @@ const Login: React.FC = () => {
 
           <button
             onClick={handleGoogleSignIn}
-            className="w-full mt-8 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white py-4 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-600 transition-all flex items-center justify-center gap-3"
+            className={`w-full mt-8 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-white py-4 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-600 transition-all flex items-center justify-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <Chrome size={20} className="text-primary" />
-            Continue with Google
+            {t('continueGoogle')}
           </button>
 
           <p className="mt-8 text-center text-slate-600 dark:text-slate-400 font-medium">
-            {isRegistering ? 'Already have an account?' : "Don't have an account?"}{' '}
+            {isRegistering ? t('hasAccount') : t('noAccount')}{' '}
             <button
               onClick={() => setIsRegistering(!isRegistering)}
               className="text-primary font-bold hover:underline"
             >
-              {isRegistering ? 'Sign In' : 'Create Account'}
+              {isRegistering ? t('signIn') : t('createAccount')}
             </button>
           </p>
         </div>

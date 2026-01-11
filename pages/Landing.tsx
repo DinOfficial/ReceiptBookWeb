@@ -212,7 +212,7 @@ const Landing: React.FC = () => {
                     <CheckCircle2 className="text-green-600" size={20} />
                  </div>
                  <div>
-                    <div className="text-xs text-slate-400 font-bold uppercase">Payment Received</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase">{t('paymentReceived')}</div>
                     <div className="text-lg font-bold text-slate-800 dark:text-white">$1,250.00</div>
                  </div>
                </motion.div>
@@ -227,8 +227,8 @@ const Landing: React.FC = () => {
                     <Smartphone className="text-primary" size={20} />
                  </div>
                  <div>
-                    <div className="text-xs text-slate-400 font-bold uppercase">Mobile Sync</div>
-                    <div className="text-sm font-bold text-slate-800 dark:text-white">Active</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase">{t('mobileSync')}</div>
+                    <div className="text-sm font-bold text-slate-800 dark:text-white">{t('active')}</div>
                  </div>
                </motion.div>
             </div>
@@ -310,7 +310,7 @@ const Landing: React.FC = () => {
             </div>
             <span className="font-bold text-slate-800 dark:text-white">{t('companyName')}</span>
           </div>
-          <p className="text-slate-400 text-sm">© 2024 Receipt Book Inc. All rights reserved.</p>
+          <p className="text-slate-400 text-sm">{t('footerRights')}</p>
         </div>
       </footer>
     </div>

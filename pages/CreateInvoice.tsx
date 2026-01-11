@@ -15,11 +15,13 @@ import {
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { Loader } from '../components/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const CreateInvoice: React.FC = () => {
   const { user, company } = useUser();
   const navigate = useNavigate();
   const { success, error } = useToast();
+  const { t, isRTL } = useLanguage();
   
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -158,14 +160,14 @@ const CreateInvoice: React.FC = () => {
   if (loading) return <Loader fullScreen={false} />;
 
   return (
-    <div className="h-[calc(100vh-80px)] overflow-hidden flex flex-col">
-      <div className="flex items-center justify-between gap-4 mb-4 px-1 shrink-0">
-        <div className="flex items-center gap-4">
+    <div className={`h-[calc(100vh-80px)] overflow-hidden flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
+      <div className={`flex items-center justify-between gap-4 mb-4 px-1 shrink-0 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <button onClick={() => navigate(-1)} className="p-2 hover:bg-white rounded-full transition-colors">
-            <ChevronLeft size={24} />
+            <ChevronLeft size={24} className={isRTL ? 'rotate-180' : ''} />
             </button>
             <div>
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Create New Invoice</h1>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{t('createNewInvoice')}</h1>
             </div>
         </div>
         <button 
@@ -176,15 +178,15 @@ const CreateInvoice: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex-1 flex gap-8 overflow-hidden">
+      <div className={`flex-1 flex gap-8 overflow-hidden ${isRTL ? 'flex-row-reverse' : ''}`}>
         {/* Left Column - Input Form */}
         <div className={`flex-1 overflow-y-auto pb-20 lg:pb-0 ${showMobilePreview ? 'hidden lg:block' : 'block'}`}>
           <form onSubmit={handleSave} className="space-y-6 max-w-2xl">
             {/* Customer Section */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-6">
-              <div className="flex items-center gap-2 text-primary font-bold mb-2">
+              <div className={`flex items-center gap-2 text-primary font-bold mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <UserPlus size={20} />
-                <span>Customer Information</span>
+                <span>{t('customerInfo')}</span>
               </div>
               
               <div className="flex gap-4">
@@ -193,14 +195,14 @@ const CreateInvoice: React.FC = () => {
                   onClick={() => setIsAddingNewCustomer(false)}
                   className={`flex-1 py-2 rounded-lg text-sm font-bold border ${!isAddingNewCustomer ? 'bg-primary text-white border-primary' : 'bg-transparent text-slate-400 border-slate-200'}`}
                 >
-                  Existing
+                  {t('existing')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsAddingNewCustomer(true)}
                   className={`flex-1 py-2 rounded-lg text-sm font-bold border ${isAddingNewCustomer ? 'bg-primary text-white border-primary' : 'bg-transparent text-slate-400 border-slate-200'}`}
                 >
-                  New
+                  {t('new')}
                 </button>
               </div>
 
@@ -211,7 +213,7 @@ const CreateInvoice: React.FC = () => {
                   onChange={(e) => setSelectedCustomerId(e.target.value)}
                   required={!isAddingNewCustomer}
                 >
-                  <option value="">Choose a customer...</option>
+                  <option value="">{t('chooseCustomer')}</option>
                   {customers.map((c) => (
                     <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
@@ -219,7 +221,7 @@ const CreateInvoice: React.FC = () => {
               ) : (
                 <div className="grid grid-cols-1 gap-4">
                   <input
-                    placeholder="Customer Name"
+                    placeholder={t('customerName')}
                     className="input-primary"
                     value={newCustomer.name}
                     onChange={(e) => setNewCustomer({...newCustomer, name: e.target.value})}
@@ -245,24 +247,24 @@ const CreateInvoice: React.FC = () => {
             </div>
 
             {/* Invoice Details */}
-            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 grid grid-cols-2 gap-4">
+            <div className={`bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 grid grid-cols-2 gap-4 ${isRTL ? 'text-right' : ''}`}>
                <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Invoice #</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">{t('invoiceNum')}</label>
                   <input className="input-primary" value={invoiceNo} onChange={(e) => setInvoiceNo(e.target.value)} required />
                </div>
                <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Date</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">{t('date')}</label>
                   <input type="date" className="input-primary dark:text-slate-400" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} required />
                </div>
                <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Status</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">{t('status')}</label>
                   <select className="input-primary dark:bg-slate-700" value={status} onChange={(e) => setStatus(e.target.value)}>
                     <option value="Paid">Paid</option>
                     <option value="Unpaid">Unpaid</option>
                   </select>
                </div>
                <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Payment</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">{t('paymentSystem')}</label>
                   <select className="input-primary dark:bg-slate-700" value={paymentSystem} onChange={(e) => setPaymentSystem(e.target.value)}>
                     {availablePaymentMethods.map(method => (
                       <option key={method} value={method}>{method}</option>
@@ -273,15 +275,15 @@ const CreateInvoice: React.FC = () => {
 
             {/* Items */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-               <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-bold text-slate-700 dark:text-slate-300">Items</h3>
+               <div className={`flex justify-between items-center mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <h3 className="font-bold text-slate-700 dark:text-slate-300">{t('items')}</h3>
                   <button type="button" onClick={addItem} className="text-primary hover:bg-slate-50 dark:hover:bg-slate-700 p-2 rounded"><Plus size={18}/></button>
                </div>
                <div className="space-y-4">
                 {items.map((item, index) => (
                   <div key={index} className="grid grid-cols-12 gap-2 items-end border-b border-slate-50 dark:border-slate-700 pb-2">
                     <div className="col-span-5">
-                      <input placeholder="Item" className="input-primary text-sm py-2" value={item.name} onChange={(e) => handleItemChange(index, 'name', e.target.value)} required />
+                      <input placeholder={t('item')} className="input-primary text-sm py-2" value={item.name} onChange={(e) => handleItemChange(index, 'name', e.target.value)} required />
                     </div>
                     <div className="col-span-2">
                       <input type="number" className="input-primary text-sm py-2 px-1 text-center" value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value) || 0)} />
@@ -300,16 +302,16 @@ const CreateInvoice: React.FC = () => {
 
             {/* Totals Input */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-4">
-                <div className="flex justify-between items-center dark:text-slate-300">
-                    <span>Discount (%)</span>
+                <div className={`flex justify-between items-center dark:text-slate-300 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <span>{t('discount')} (%)</span>
                     <input type="number" className="input-primary w-20 text-right" value={discount} onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)} />
                 </div>
-                <div className="flex justify-between items-center dark:text-slate-300">
-                    <span>Tax (%)</span>
+                <div className={`flex justify-between items-center dark:text-slate-300 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <span>{t('tax')} (%)</span>
                     <input type="number" className="input-primary w-20 text-right" value={tax} onChange={(e) => setTax(parseFloat(e.target.value) || 0)} />
                 </div>
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center text-xl font-bold text-primary">
-                    <span>Total</span>
+                <div className={`pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center text-xl font-bold text-primary ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <span>{t('grandTotal')}</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
             </div>
@@ -317,9 +319,9 @@ const CreateInvoice: React.FC = () => {
             <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
+                className={`w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}
               >
-                {submitting ? 'Generating...' : 'Save Invoice'}
+                {submitting ? t('generating') : t('saveInvoice')}
             </button>
           </form>
         </div>
