@@ -283,7 +283,7 @@ const Settings: React.FC = () => {
                        <DollarSign size={16} /> {t('currencySymbol')}
                     </label>
                     <div className="grid grid-cols-4 gap-2">
-                      {['$', '€', '£', '¥', '₹', 'Rp', 'R', 'د.إ'].map(curr => (
+                      {['$', '€', '£', '¥', '₹', 'Rp', 'R', 'د.إ', 'ر.س', 'SAR'].map(curr => (
                         <button
                           key={curr}
                           onClick={() => setCurrency(curr)}
